@@ -10,8 +10,6 @@ find correct extensions for non fav sites (worst case)
 
 better case: trawl bookmarks, history
 
-open things in different browsers
-
 open things in incognito
 
 learn from own behavior and suggest updates on launch
@@ -21,3 +19,5 @@ autoblocking tool that disables other behavior ("you should be studying lmao")
 support documentation (--help?)
 
 switch fav sites to different file, add write support.
+
+twilio? text support for scheduled tasks

@@ -99,9 +99,25 @@ def scheduler(command):
         return "Please enter a valid unit of time (minutes or hours)."
 
     target_file = open(SLEEPFILE, 'w')
-    target_file.write(str(sleep_seconds))
+    unform_wake = datetime.datetime.now() + datetime.timedelta(seconds=sleep_seconds)
+    timewrite = str(unform_wake.weekday()) + " " + str(unform_wake.day) + " " + str(unform_wake.year) + " " + str(unform_wake.hour) + ":" + str(unform_wake.minute)
+    target_file.write(timewrite)
     target_file.close()
-    return sleep_seconds
+    return "Your timeblock has been scheduled.  Good luck! " + unicode_emote[random.randrange(0, len(unicode_emote)-1)]
+
+def wake():
+    target_file = open(SLEEPFILE, 'r')
+    wake_time = target_file.read()
+    wake_time = datetime.datetime.strptime(wake_time, '%w %d %Y %H:%M')
+    time_till_wake = datetime.datetime.now() - wake_time
+    if "-" in str(time_till_wake):
+        target_file.write("")
+        target_file.close()
+        return "You've finished your current block!"
+    else:
+        target_file.close()
+        return time_till_wake
+
 
 ####################################################################################################################
 def command_handler(command):
@@ -109,5 +125,8 @@ def command_handler(command):
         return navigate_web(command)
     elif "heads down for" in command:
         return scheduler(command)
+    # elif "what's my block time?" in command or "block time" in command:
+    #     return "You have"
 
 print(command_handler(command))
+print(wake())
