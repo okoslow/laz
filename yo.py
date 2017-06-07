@@ -1,7 +1,5 @@
-#setup instructions:
-#find CORRECT .bash_profile
-#add:    alias go="python3 ~/Desktop/yo/yo.py" or relevant path
 
+#imports
 ####################################################################################################################
 
 import webbrowser
@@ -65,22 +63,3 @@ if "go" in command and "to" in command or "show" and "me" in command :
      #opening
      webbrowser.get('safari')
      webbrowser.open_new_tab('http://' + website )  # Go to example.com
-
-
-
-
-
-#wish list :
-#   find correct extensions for non fav sites (worst case)
-#   better case: trawl bookmarks, history
-#
-#   open things in different browsers
-#   open things in incognito
-#
-#   learn from own behavior and suggest updates on launch
-#
-#   autoblocking tool that disables other behavior ("you should be studying u fk")
-#
-#   support documentation (--help?)
-#
-#   add bashrc alias
