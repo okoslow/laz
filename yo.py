@@ -6,10 +6,11 @@ import webbrowser
 # import json
 import subprocess
 import random
+import datetime
+import os
 ####################################################################################################################
-CHROME_PATH = 'open -a /Applications/Google\ Chrome.app %s'
-BROWSER = webbrowser.get(CHROME_PATH)
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
+SLEEPFILE = os.path.abspath('.timewrites')
 ####################################################################################################################
 def run_bash(bash_command):
     bash_output = str(subprocess.check_output(['bash','-c', bash_command]))
@@ -83,8 +84,30 @@ def navigate_web(command):
      return webbrowser.open_new_tab('http://' + website )  # Go to example.com
 
 ####################################################################################################################
+
+def scheduler(command):
+    relevant = command[command.index("for") + 3:]
+    if "hours" in relevant:
+        relevant = relevant[0:relevant.index("hours")]
+        relevant = relevant.strip()
+        sleep_seconds = int(relevant)*3600
+    elif "minutes" or "mins" in relevant:
+        relevant = relevant[0:relevant.index("min")]
+        relevant = relevant.strip()
+        sleep_seconds = int(relevant)*60
+    else:
+        return "Please enter a valid unit of time (minutes or hours)."
+
+    target_file = open(SLEEPFILE, 'w')
+    target_file.write(str(sleep_seconds))
+    target_file.close()
+    return sleep_seconds
+
+####################################################################################################################
 def command_handler(command):
     if "go" in command and "to" in command or "show" and "me" in command or "open" in command:
         return navigate_web(command)
+    elif "heads down for" in command:
+        return scheduler(command)
 
 print(command_handler(command))

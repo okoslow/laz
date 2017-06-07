@@ -20,6 +20,4 @@ autoblocking tool that disables other behavior ("you should be studying lmao")
 
 support documentation (--help?)
 
-add bashrc alias [DONE :)]
-
-create launchpage / custom greetings
+switch fav sites to different file, add write support.
