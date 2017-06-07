@@ -11,6 +11,7 @@ import os
 ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
 SLEEPFILE = os.path.abspath('.timewrites')
+BLOCKFILE = os.path.abspath('.currentlyblocked')
 BLOCKED = False
 ####################################################################################################################
 def run_bash(bash_command):
@@ -26,12 +27,22 @@ def whoami():
 
 unicode_emote = ["☺☻☹♡♥❤⚘❀❃❁✼☀✌♫♪☃❄❅❆☕☂★","｡◕‿‿◕｡","(｡◕‿‿◕｡)","(ಠ‿ಠ)","♥‿♥","(¬‿¬)","ʕ•ᴥ•ʔ","(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧","(ᵔᴥᵔ)","(•ω•)","☜(⌒▽⌒)☞","(づ｡◕‿‿◕｡)づ","(╯°□°）╯︵ ┻━┻","٩(⁎❛ᴗ❛⁎)۶","¯\_(ツ)_/¯"]
 
+def get_block_status():
+    target_file = open(BLOCKFILE, 'r')
+    block_status = target_file.read()
+    target_file.close()
+    BLOCKED = False
+    if block_status == "ON":
+        BLOCKED = True
+    return BLOCKED
+
 def greet(name):
+    BLOCKED = get_block_status()
     if BLOCKED:
-        block_status = "\n You are currently blocked."
+        block_message = "\n You are currently blocked."
     else:
-        block_status = ""
-    return "Welcome, " + name + " " + unicode_emote[random.randrange(0, len(unicode_emote)-1)] + block_status
+        block_message = ""
+    return "Welcome, " + name + " " + unicode_emote[random.randrange(0, len(unicode_emote)-1)] + block_message
 ####################################################################################################################
 
 common_sites = {
@@ -109,6 +120,11 @@ def scheduler(command):
     target_file.write(timewrite)
     target_file.close()
     BLOCKED = True
+
+    new_target = open(BLOCKFILE, 'w')
+    write_block = new_target.write("ON")
+    new_target.close()
+
     return "Your timeblock has been scheduled.  Good luck! " + unicode_emote[random.randrange(0, len(unicode_emote)-1)]
 
 def wake():
@@ -119,6 +135,9 @@ def wake():
     if "-" in str(time_till_wake):
         target_file.write("")
         target_file.close()
+        new_target = open(BLOCKFILE, 'w')
+        new_target.write("")
+        new_target.close()
         BLOCKED = False
         return "You're not currently assigned a block!"
     else:
