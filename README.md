@@ -1,4 +1,4 @@
-# Read this or don't
+# Look Ma No Mouse
 
 SETUP:
 find CORRECT .bash_profile
