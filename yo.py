@@ -113,10 +113,10 @@ def wake():
     if "-" in str(time_till_wake):
         target_file.write("")
         target_file.close()
-        return "You've finished your current block!"
+        return "You're not currently assigned a block!"
     else:
         target_file.close()
-        return time_till_wake
+        return "You have " + str(time_till_wake) + " time left."
 
 
 ####################################################################################################################
@@ -125,8 +125,7 @@ def command_handler(command):
         return navigate_web(command)
     elif "heads down for" in command:
         return scheduler(command)
-    # elif "what's my block time?" in command or "block time" in command:
-    #     return "You have"
+    elif "what's my block time?" in command or "block time" in command or "time left" in command or "time?" in command:
+        return wake()
 
 print(command_handler(command))
-print(wake())
