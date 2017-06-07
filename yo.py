@@ -32,8 +32,8 @@ common_sites = {
     "stackoverflow": "stackoverflow.com",
     "github": "github.com",
     "gerrit": "code.brigade.zone",
-    "jira": "brigade.atlassian.net/secure/Dashboard.jspa"
-
+    "jira": "brigade.atlassian.net/secure/Dashboard.jspa",
+    "latex": "sharelatex.com"
 }
 
 ####################################################################################################################
