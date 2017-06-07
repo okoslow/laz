@@ -11,6 +11,7 @@ import os
 ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
 SLEEPFILE = os.path.abspath('.timewrites')
+BLOCKED = False
 ####################################################################################################################
 def run_bash(bash_command):
     bash_output = str(subprocess.check_output(['bash','-c', bash_command]))
@@ -26,7 +27,11 @@ def whoami():
 unicode_emote = ["☺☻☹♡♥❤⚘❀❃❁✼☀✌♫♪☃❄❅❆☕☂★","｡◕‿‿◕｡","(｡◕‿‿◕｡)","(ಠ‿ಠ)","♥‿♥","(¬‿¬)","ʕ•ᴥ•ʔ","(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧","(ᵔᴥᵔ)","(•ω•)","☜(⌒▽⌒)☞","(づ｡◕‿‿◕｡)づ","(╯°□°）╯︵ ┻━┻","٩(⁎❛ᴗ❛⁎)۶","¯\_(ツ)_/¯"]
 
 def greet(name):
-    return "Welcome, " + name + " " + unicode_emote[random.randrange(0, len(unicode_emote)-1)]
+    if BLOCKED:
+        block_status = "\n You are currently blocked."
+    else:
+        block_status = ""
+    return "Welcome, " + name + " " + unicode_emote[random.randrange(0, len(unicode_emote)-1)] + block_status
 ####################################################################################################################
 
 common_sites = {
@@ -103,6 +108,7 @@ def scheduler(command):
     timewrite = str(unform_wake.weekday()) + " " + str(unform_wake.day) + " " + str(unform_wake.year) + " " + str(unform_wake.hour) + ":" + str(unform_wake.minute)
     target_file.write(timewrite)
     target_file.close()
+    BLOCKED = True
     return "Your timeblock has been scheduled.  Good luck! " + unicode_emote[random.randrange(0, len(unicode_emote)-1)]
 
 def wake():
@@ -113,6 +119,7 @@ def wake():
     if "-" in str(time_till_wake):
         target_file.write("")
         target_file.close()
+        BLOCKED = False
         return "You're not currently assigned a block!"
     else:
         target_file.close()
