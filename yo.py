@@ -37,6 +37,12 @@ def get_block_status():
         BLOCKED = True
     return BLOCKED
 
+def unblock():
+    target_file = open(BLOCKFILE, 'w')
+    block_status = target_file.truncate()
+    target_file.close()
+    return " "
+
 def web_access_handler(block_state):
     if block_state:
         WEB_ACCESS = False
@@ -173,6 +179,8 @@ def command_handler(command):
         return scheduler(command)
     elif "blocktime" in command or "time" in command:
         return wake_update()
+    elif "unblock" in command:
+        return unblock()
     else:
         return "Invalid command"
 
