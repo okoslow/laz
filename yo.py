@@ -12,19 +12,13 @@ import os
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
 SLEEPFILE = os.path.abspath('.timewrites')
 BLOCKFILE = os.path.abspath('.currentlyblocked')
+NAMEFILE = os.path.abspath('.customname')
 ####################################################################################################################
 def run_bash(bash_command):
     bash_output = str(subprocess.check_output(['bash','-c', bash_command]))
     return bash_output
 
 ####################################################################################################################
-def whoami():
-    bash_command = "id -F"
-    whoami = run_bash(bash_command)
-    whoami = whoami[2:len(whoami)-3]
-    return whoami
-
-unicode_emote = ["☺☻♡♥❤⚘❀❃❁✼☀✌♫♪☃❄❅❆☕☂★","｡◕‿‿◕｡","(｡◕‿‿◕｡)","(ಠ‿ಠ)","♥‿♥","(¬‿¬)","ʕ•ᴥ•ʔ","(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧","(ᵔᴥᵔ)","(•ω•)","☜(⌒▽⌒)☞","(づ｡◕‿‿◕｡)づ","(╯°□°）╯︵ ┻━┻","٩(⁎❛ᴗ❛⁎)۶","¯\_(ツ)_/¯"]
 
 def get_block_status():
     target_file = open(BLOCKFILE, 'r')
@@ -46,6 +40,32 @@ def web_access_handler(block_state):
     if block_state:
         WEB_ACCESS = False
     return WEB_ACCESS
+
+####################################################################################################################
+def whoami():
+    bash_command = "id -F"
+    whoami = run_bash(bash_command)
+    whoami = whoami[2:len(whoami)-3]
+    return whoami
+
+def nickname(command):
+    relevant = command[command.index("me") + 2: ]
+    name = relevant.strip()
+    target_file = open(NAMEFILE, 'w')
+    target_file.write(name)
+    target_file.close()
+    return ""
+
+def getname():
+    target_file = open(NAMEFILE, 'r')
+    contents = target_file.read()
+    if contents.isalnum():
+        target_file.close()
+        return contents
+    target_file.close()
+    return whoami()
+
+unicode_emote = ["☺☻♡♥❤⚘❀❃❁✼☀✌♫♪☃❄❅❆☕☂★","｡◕‿‿◕｡","(｡◕‿‿◕｡)","(ಠ‿ಠ)","♥‿♥","(¬‿¬)","ʕ•ᴥ•ʔ","(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧","(ᵔᴥᵔ)","(•ω•)","☜(⌒▽⌒)☞","(づ｡◕‿‿◕｡)づ","(╯°□°）╯︵ ┻━┻","٩(⁎❛ᴗ❛⁎)۶","¯\_(ツ)_/¯"]
 
 def greet(name):
     BLOCKED = get_block_status()
@@ -88,7 +108,7 @@ common_sites = {
 
 ####################################################################################################################
 
-print(greet(whoami()))
+print(greet(getname()))
 command = str(input("What do you want to do? \n")).lower()
 
 ####################################################################################################################
@@ -180,6 +200,8 @@ def command_handler(command):
         return wake_update()
     elif "unblock" in command:
         return unblock()
+    elif "callme" in command:
+        return nickname(command)
     elif "quit" or "nothing" or "exit" in command:
         return "Have a nice day! (=^..^=)"
     else:
