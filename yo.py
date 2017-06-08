@@ -13,6 +13,7 @@ GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
 SLEEPFILE = os.path.abspath('.timewrites')
 BLOCKFILE = os.path.abspath('.currentlyblocked')
 BLOCKED = False
+WEB_ACCESS = True
 ####################################################################################################################
 def run_bash(bash_command):
     bash_output = str(subprocess.check_output(['bash','-c', bash_command]))
@@ -25,7 +26,7 @@ def whoami():
     whoami = whoami[2:len(whoami)-3]
     return whoami
 
-unicode_emote = ["☺☻☹♡♥❤⚘❀❃❁✼☀✌♫♪☃❄❅❆☕☂★","｡◕‿‿◕｡","(｡◕‿‿◕｡)","(ಠ‿ಠ)","♥‿♥","(¬‿¬)","ʕ•ᴥ•ʔ","(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧","(ᵔᴥᵔ)","(•ω•)","☜(⌒▽⌒)☞","(づ｡◕‿‿◕｡)づ","(╯°□°）╯︵ ┻━┻","٩(⁎❛ᴗ❛⁎)۶","¯\_(ツ)_/¯"]
+unicode_emote = ["☺☻♡♥❤⚘❀❃❁✼☀✌♫♪☃❄❅❆☕☂★","｡◕‿‿◕｡","(｡◕‿‿◕｡)","(ಠ‿ಠ)","♥‿♥","(¬‿¬)","ʕ•ᴥ•ʔ","(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧","(ᵔᴥᵔ)","(•ω•)","☜(⌒▽⌒)☞","(づ｡◕‿‿◕｡)づ","(╯°□°）╯︵ ┻━┻","٩(⁎❛ᴗ❛⁎)۶","¯\_(ツ)_/¯"]
 
 def get_block_status():
     target_file = open(BLOCKFILE, 'r')
@@ -36,10 +37,15 @@ def get_block_status():
         BLOCKED = True
     return BLOCKED
 
+def web_access_handler(block_state):
+    if block_state:
+        WEB_ACCESS = False
+    return WEB_ACCESS
+
 def greet(name):
     BLOCKED = get_block_status()
     if BLOCKED:
-        block_message = "\n You are currently blocked."
+        block_message = "\nYou are currently blocked."
     else:
         block_message = ""
     return "Welcome, " + name + " " + unicode_emote[random.randrange(0, len(unicode_emote)-1)] + block_message
@@ -127,31 +133,47 @@ def scheduler(command):
 
     return "Your timeblock has been scheduled.  Good luck! " + unicode_emote[random.randrange(0, len(unicode_emote)-1)]
 
-def wake():
+def wake_update():
     target_file = open(SLEEPFILE, 'r')
     wake_time = target_file.read()
     wake_time = datetime.datetime.strptime(wake_time, '%w %d %Y %H:%M')
+    # target_file.close()
+    # return wake_time
     time_till_wake = datetime.datetime.now() - wake_time
     if "-" in str(time_till_wake):
-        target_file.write("")
+        target_file.write("") #empty wakefile
         target_file.close()
-        new_target = open(BLOCKFILE, 'w')
-        new_target.write("")
+
+        new_target = open(BLOCKFILE, 'w') #clear blockfile
+        new_target.write("OFF")
         new_target.close()
+
         BLOCKED = False
         return "You're not currently assigned a block!"
     else:
         target_file.close()
-        return "You have " + str(time_till_wake) + " time left."
+        BLOCKED = True
+        return "You have " + str(time_till_wake) + " left."
 
 
 ####################################################################################################################
+
+BLOCKED = get_block_status()
+WEB_ACCESS = web_access_handler(BLOCKED)
+
+
 def command_handler(command):
-    if "go" in command and "to" in command or "show" and "me" in command or "open" in command:
-        return navigate_web(command)
-    elif "heads down for" in command:
+    if "go" in command and "to" in command or "goto" in command or "showme" in command:
+        if WEB_ACCESS:
+            navigate_web(command)
+            return ""
+        else:
+            return "You don't currently have web access."
+    elif "heads down for" or "hdf" in command:
         return scheduler(command)
-    elif "what's my block time?" in command or "block time" in command or "time left" in command or "time?" in command:
-        return wake()
+    elif "block time" in command or "time left" in command or "time?" in command:
+        return wake_update()
+    else:
+        return "Invalid command"
 
 print(command_handler(command))
