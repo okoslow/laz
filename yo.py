@@ -122,7 +122,7 @@ def scheduler(command):
 
     target_file = open(SLEEPFILE, 'w')
     unform_wake = datetime.datetime.now() + datetime.timedelta(seconds=sleep_seconds)
-    timewrite = str(unform_wake.weekday()) + " " + str(unform_wake.day) + " " + str(unform_wake.year) + " " + str(unform_wake.hour) + ":" + str(unform_wake.minute)
+    timewrite = str(unform_wake.month) + " " + str(unform_wake.day) + " " + str(unform_wake.year) + " " + str(unform_wake.hour) + ":" + str(unform_wake.minute)
     target_file.write(timewrite)
     target_file.close()
     BLOCKED = True
@@ -136,16 +136,16 @@ def scheduler(command):
 def wake_update():
     target_file = open(SLEEPFILE, 'r')
     wake_time = target_file.read()
-    wake_time = datetime.datetime.strptime(wake_time, '%w %d %Y %H:%M')
+    wake_time = datetime.datetime.strptime(wake_time, '%m %d %Y %H:%M')
     # target_file.close()
     # return wake_time
     time_till_wake = datetime.datetime.now() - wake_time
     if "-" in str(time_till_wake):
-        target_file.write("") #empty wakefile
+        target_file.truncate() #empty wakefile
         target_file.close()
 
         new_target = open(BLOCKFILE, 'w') #clear blockfile
-        new_target.write("OFF")
+        new_target.truncate()
         new_target.close()
 
         BLOCKED = False
@@ -169,9 +169,9 @@ def command_handler(command):
             return ""
         else:
             return "You don't currently have web access."
-    elif "heads down for" or "hdf" in command:
+    elif "headsdownfor" in command:
         return scheduler(command)
-    elif "block time" in command or "time left" in command or "time?" in command:
+    elif "blocktime" in command or "time" in command:
         return wake_update()
     else:
         return "Invalid command"
