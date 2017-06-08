@@ -169,7 +169,11 @@ def command_handler(command):
             return ""
         else:
             return "You don't currently have web access."
+<<<<<<< HEAD
     elif "heads down for" or "hdf" in command:
+=======
+    elif "heads down for" in command:
+>>>>>>> 80236a019da42c17d3b9e01215b35be23bd4a067
         return scheduler(command)
     elif "block time" in command or "time left" in command or "time?" in command:
         return wake_update()
