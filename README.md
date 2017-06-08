@@ -19,3 +19,7 @@ support documentation (--help?)
 switch fav sites to different file, add write support.
 
 twilio? text support for scheduled tasks
+
+add weather forecast in greeting
+
+add specific tasklist management

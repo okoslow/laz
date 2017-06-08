@@ -12,8 +12,6 @@ import os
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
 SLEEPFILE = os.path.abspath('.timewrites')
 BLOCKFILE = os.path.abspath('.currentlyblocked')
-BLOCKED = False
-WEB_ACCESS = True
 ####################################################################################################################
 def run_bash(bash_command):
     bash_output = str(subprocess.check_output(['bash','-c', bash_command]))
@@ -44,6 +42,7 @@ def unblock():
     return " "
 
 def web_access_handler(block_state):
+    WEB_ACCESS = True
     if block_state:
         WEB_ACCESS = False
     return WEB_ACCESS
@@ -181,6 +180,8 @@ def command_handler(command):
         return wake_update()
     elif "unblock" in command:
         return unblock()
+    elif "quit" or "nothing" or "exit" in command:
+        return "Have a nice day! (=^..^=)"
     else:
         return "Invalid command"
 
