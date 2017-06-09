@@ -10,16 +10,23 @@ import datetime
 import os
 ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
+SLEEPFILE = ""
+BLOCKFILE = ""
+NAMEFILE = ""
+####################################################################################################################
+def run_bash(bash_command, silent):
+    bash_output = subprocess.check_output(['bash','-c', bash_command])
+    if not silent:
+        return str(bash_output)[2:len(str(bash_output)) -3]
+    else:
+        return ""
+####################################################################################################################
+CURRENTDIR = run_bash('pwd', True)
+LOCALDIR = run_bash('cd ~/', True)
 SLEEPFILE = os.path.abspath('.timewrites')
 BLOCKFILE = os.path.abspath('.currentlyblocked')
 NAMEFILE = os.path.abspath('.customname')
 ####################################################################################################################
-def run_bash(bash_command):
-    bash_output = str(subprocess.check_output(['bash','-c', bash_command]))
-    return bash_output
-
-####################################################################################################################
-
 def get_block_status():
     target_file = open(BLOCKFILE, 'r')
     block_status = target_file.read()
@@ -33,7 +40,7 @@ def unblock():
     target_file = open(BLOCKFILE, 'w')
     block_status = target_file.truncate()
     target_file.close()
-    return " "
+    return "Your block time has been removed."
 
 def web_access_handler(block_state):
     WEB_ACCESS = True
@@ -44,8 +51,7 @@ def web_access_handler(block_state):
 ####################################################################################################################
 def whoami():
     bash_command = "id -F"
-    whoami = run_bash(bash_command)
-    whoami = whoami[2:len(whoami)-3]
+    whoami = run_bash(bash_command, False)
     return whoami
 
 def nickname(command):
@@ -54,7 +60,7 @@ def nickname(command):
     target_file = open(NAMEFILE, 'w')
     target_file.write(name)
     target_file.close()
-    return ""
+    return "Your new name has been set!"
 
 def getname():
     target_file = open(NAMEFILE, 'r')
@@ -75,7 +81,6 @@ def greet(name):
         block_message = ""
     return "Welcome, " + name + " " + unicode_emote[random.randrange(0, len(unicode_emote)-1)] + block_message
 ####################################################################################################################
-
 common_sites = {
 
     #social media
@@ -105,14 +110,7 @@ common_sites = {
     "jira": "brigade.atlassian.net/secure/Dashboard.jspa",
     "latex": "sharelatex.com"
 }
-
 ####################################################################################################################
-
-print(greet(getname()))
-command = str(input("What do you want to do? \n")).lower()
-
-####################################################################################################################
-
 def navigate_web(command):
      if "go" in command and "to" in command:
          relevant = command[command.index("to") + 2:]
@@ -129,9 +127,7 @@ def navigate_web(command):
          website = desired_site + ".com"
 
      return webbrowser.open_new_tab('http://' + website )  # Go to example.com
-
 ####################################################################################################################
-
 def scheduler(command):
     relevant = command[command.index("for") + 3:]
     if "hours" in relevant:
@@ -162,13 +158,10 @@ def wake_update():
     target_file = open(SLEEPFILE, 'r')
     wake_time = target_file.read()
     wake_time = datetime.datetime.strptime(wake_time, '%m %d %Y %H:%M')
-    # target_file.close()
-    # return wake_time
     time_till_wake = datetime.datetime.now() - wake_time
     if "-" in str(time_till_wake):
         target_file.truncate() #empty wakefile
         target_file.close()
-
         new_target = open(BLOCKFILE, 'w') #clear blockfile
         new_target.truncate()
         new_target.close()
@@ -179,32 +172,40 @@ def wake_update():
         target_file.close()
         BLOCKED = True
         return "You have " + str(time_till_wake) + " left."
-
-
 ####################################################################################################################
-
-BLOCKED = get_block_status()
-WEB_ACCESS = web_access_handler(BLOCKED)
-
-
 def command_handler(command):
-    if "go" in command and "to" in command or "goto" in command or "showme" in command:
+    if "go" in command and "to" in command or "goto" in command or "show" in command and "me" in command:
         if WEB_ACCESS:
             navigate_web(command)
-            return ""
+            return "Launching web."
         else:
             return "You don't currently have web access."
-    elif "headsdownfor" in command:
+    elif "headsdownfor" in command or "hdfor" in command:
         return scheduler(command)
     elif "blocktime" in command or "time" in command:
         return wake_update()
     elif "unblock" in command:
         return unblock()
-    elif "callme" in command:
+    elif "callme" in command or "call me" in command:
         return nickname(command)
-    elif "quit" or "nothing" or "exit" in command:
+    elif "run" in command:
+        return run_bash(command[command.index("run")+3:])
+    elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:
         return "Have a nice day! (=^..^=)"
     else:
-        return "Invalid command"
+        print("Invalid command.")
+        return 0
 
-print(command_handler(command))
+
+####################################################################################################################
+#execution block
+BLOCKED = get_block_status()
+WEB_ACCESS = web_access_handler(BLOCKED)
+
+print(greet(getname()))
+command = str(input("What do you want to do? \n")).lower()
+while not command_handler(command):
+    command = str(input("What do you want to do? \n")).lower()
+    print(command_handler(command))
+
+RETURNDIR = run_bash('cd ' + LOCALDIR, True)
