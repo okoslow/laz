@@ -199,16 +199,11 @@ def add_to_history(element):
     target_file.close()
     return "wrote" + element + "to history"
 
-####################################################################################################################
-def validity_checker(command):
-    for valid_command in valid_commands:
-        if valid_command in command:
-            return True
-
 def command_handler(): #eventually turn this into a command->fn dict
-    valid = True
-    while valid:
+    command = ""
+    while "quit" not in command  or "exit" not in command or "nothing" not in command or "go" not in command:
         command = str(input("What do you want to do? \n")).lower()
+
         valid = validity_checker(command)
         if "go" in command and "to" in command or "goto" in command or "show" in command and "me" in command:
             if WEB_ACCESS:
@@ -227,27 +222,10 @@ def command_handler(): #eventually turn this into a command->fn dict
         elif "run" in command:
             print(run_bash(command[command.index("run")+3:]))
         elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:
-            print("Have a nice day! (=^..^=)")
             break
         else:
             print("Invalid command: " + command)
-    return ""
-
-    # valid = True
-    # while valid:
-    #     for valid_command in valid_commands:
-    #         if valid_command in command:
-    #             #if any part of the command is valid
-    #             valid = True #maintain true
-    #     if valid :
-    #         execute
-    #         continue
-    #     else:
-    #         break
-    # if valid_command:
-    #     added = add_to_history(command)
-    #
-
+    return "Have a nice day! (=^..^=)"
 
 ####################################################################################################################
 # execution block
@@ -255,7 +233,6 @@ BLOCKED = get_block_status()
 WEB_ACCESS = web_access_handler(BLOCKED)
 
 print(greet(getname()))
-# command = str(input("What do you want to do? \n")).lower()
 results = command_handler()
 print(results)
 
