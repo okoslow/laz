@@ -192,19 +192,22 @@ def wake_update():
         return "You have " + str(time_till_wake) + " left."
 
 # ####################################################################################################################
+def validity_checker(command):
+    for valid_command in valid_commands:
+        if valid_command in command:
+            return True
+
 def add_to_history(element):
-    print("Adding to histoy")
+    to_write = element + "\n"
     target_file = open(HISTORYFILE, 'a')
-    target_file.write(element)
+    target_file.write(to_write)
     target_file.close()
-    return "wrote" + element + "to history"
+    return
 
 def command_handler(): #eventually turn this into a command->fn dict
     command = ""
     while "quit" not in command  or "exit" not in command or "nothing" not in command or "go" not in command:
         command = str(input("What do you want to do? \n")).lower()
-
-        valid = validity_checker(command)
         if "go" in command and "to" in command or "goto" in command or "show" in command and "me" in command:
             if WEB_ACCESS:
                 navigate_web(command)
@@ -225,6 +228,9 @@ def command_handler(): #eventually turn this into a command->fn dict
             break
         else:
             print("Invalid command: " + command)
+
+        if validity_checker(command):
+            add_to_history(command)
     return "Have a nice day! (=^..^=)"
 
 ####################################################################################################################
