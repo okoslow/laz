@@ -1,32 +1,31 @@
-
-#imports, globals
+ #LOOK MA NO MOUSE
 ####################################################################################################################
 import webbrowser
-# import urllib.request
-# import json
 import subprocess
 import random
 import datetime
 import os
-####################################################################################################################
+# ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
 SLEEPFILE = ""
 BLOCKFILE = ""
 NAMEFILE = ""
-####################################################################################################################
+HISTORYFILE = ""
+# ####################################################################################################################
 def run_bash(bash_command, silent):
     bash_output = subprocess.check_output(['bash','-c', bash_command])
     if not silent:
         return str(bash_output)[2:len(str(bash_output)) -3]
     else:
         return ""
-####################################################################################################################
+# ####################################################################################################################
 CURRENTDIR = run_bash('pwd', True)
 LOCALDIR = run_bash('cd ~/', True)
 SLEEPFILE = os.path.abspath('.timewrites')
 BLOCKFILE = os.path.abspath('.currentlyblocked')
 NAMEFILE = os.path.abspath('.customname')
-####################################################################################################################
+HISTORYFILE = os.path.abspath('.commandhistory')
+# ####################################################################################################################
 def get_block_status():
     target_file = open(BLOCKFILE, 'r')
     block_status = target_file.read()
@@ -48,7 +47,7 @@ def web_access_handler(block_state):
         WEB_ACCESS = False
     return WEB_ACCESS
 
-####################################################################################################################
+# ####################################################################################################################
 def whoami():
     bash_command = "id -F"
     whoami = run_bash(bash_command, False)
@@ -80,7 +79,7 @@ def greet(name):
     else:
         block_message = ""
     return "Welcome, " + name + " " + unicode_emote[random.randrange(0, len(unicode_emote)-1)] + block_message
-####################################################################################################################
+# ####################################################################################################################
 common_sites = {
 
     #social media
@@ -110,7 +109,26 @@ common_sites = {
     "jira": "brigade.atlassian.net/secure/Dashboard.jspa",
     "latex": "sharelatex.com"
 }
-####################################################################################################################
+
+valid_commands = [
+    "go to",
+    "goto",
+    "show me",
+    "showme",
+    "headsdownfor",
+    "hdfor",
+    "blocktime",
+    "time",
+    "unblock",
+    "callme",
+    "call me",
+    "run",
+    "quit",
+    "exit",
+    "nothing",
+    "go",
+]
+# ####################################################################################################################
 def navigate_web(command):
      if "go" in command and "to" in command:
          relevant = command[command.index("to") + 2:]
@@ -127,7 +145,7 @@ def navigate_web(command):
          website = desired_site + ".com"
 
      return webbrowser.open_new_tab('http://' + website )  # Go to example.com
-####################################################################################################################
+# ####################################################################################################################
 def scheduler(command):
     relevant = command[command.index("for") + 3:]
     if "hours" in relevant:
@@ -172,40 +190,73 @@ def wake_update():
         target_file.close()
         BLOCKED = True
         return "You have " + str(time_till_wake) + " left."
+
+# ####################################################################################################################
+def add_to_history(element):
+    print("Adding to histoy")
+    target_file = open(HISTORYFILE, 'a')
+    target_file.write(element)
+    target_file.close()
+    return "wrote" + element + "to history"
+
 ####################################################################################################################
-def command_handler(command):
-    if "go" in command and "to" in command or "goto" in command or "show" in command and "me" in command:
-        if WEB_ACCESS:
-            navigate_web(command)
-            return "Launching web."
+def validity_checker(command):
+    for valid_command in valid_commands:
+        if valid_command in command:
+            return True
+
+def command_handler(): #eventually turn this into a command->fn dict
+    valid = True
+    while valid:
+        command = str(input("What do you want to do? \n")).lower()
+        valid = validity_checker(command)
+        if "go" in command and "to" in command or "goto" in command or "show" in command and "me" in command:
+            if WEB_ACCESS:
+                navigate_web(command)
+                print("Launching web.")
+            else:
+                print("You don't currently have web access.")
+        elif "headsdownfor" in command or "hdfor" in command:
+            print(scheduler(command))
+        elif "blocktime" in command or "time" in command:
+            print(wake_update())
+        elif "unblock" in command:
+            print(unblock())
+        elif "callme" in command or "call me" in command:
+            print(nickname(command))
+        elif "run" in command:
+            print(run_bash(command[command.index("run")+3:]))
+        elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:
+            print("Have a nice day! (=^..^=)")
+            break
         else:
-            return "You don't currently have web access."
-    elif "headsdownfor" in command or "hdfor" in command:
-        return scheduler(command)
-    elif "blocktime" in command or "time" in command:
-        return wake_update()
-    elif "unblock" in command:
-        return unblock()
-    elif "callme" in command or "call me" in command:
-        return nickname(command)
-    elif "run" in command:
-        return run_bash(command[command.index("run")+3:])
-    elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:
-        return "Have a nice day! (=^..^=)"
-    else:
-        print("Invalid command.")
-        return 0
+            print("Invalid command: " + command)
+    return ""
+
+    # valid = True
+    # while valid:
+    #     for valid_command in valid_commands:
+    #         if valid_command in command:
+    #             #if any part of the command is valid
+    #             valid = True #maintain true
+    #     if valid :
+    #         execute
+    #         continue
+    #     else:
+    #         break
+    # if valid_command:
+    #     added = add_to_history(command)
+    #
 
 
 ####################################################################################################################
-#execution block
+# execution block
 BLOCKED = get_block_status()
 WEB_ACCESS = web_access_handler(BLOCKED)
 
 print(greet(getname()))
-command = str(input("What do you want to do? \n")).lower()
-while not command_handler(command):
-    command = str(input("What do you want to do? \n")).lower()
-    print(command_handler(command))
+# command = str(input("What do you want to do? \n")).lower()
+results = command_handler()
+print(results)
 
 RETURNDIR = run_bash('cd ' + LOCALDIR, True)
