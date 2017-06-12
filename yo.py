@@ -213,14 +213,22 @@ def get_recents(lookback):
     history = read_history()
     return history[len(history) - lookback:]
 
-def frequency_checker(history):
+def frequency_checker(history): #counting sort esque
     frequency_count = {}
     for item in history:
         if item in frequency_count:
             frequency_count[item] += 1
         else:
             frequency_count[item] = 1
-    return frequency_count
+
+    frequencies = []
+    for unique_command in frequency_count:
+        frequencies.append(frequency_count[unique_command])
+
+    for unique_command in frequency_count:
+        if frequency_count[unique_command] == max(frequencies):
+            return unique_command
+
 # ####################################################################################################################
 def validity_checker(command):
     for valid_command in valid_commands:
