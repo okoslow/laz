@@ -127,6 +127,7 @@ valid_commands = [
     "exit",
     "nothing",
     "go",
+    "checkhistory"
 ]
 # ####################################################################################################################
 def navigate_web(command):
@@ -192,17 +193,39 @@ def wake_update():
         return "You have " + str(time_till_wake) + " left."
 
 # ####################################################################################################################
-def validity_checker(command):
-    for valid_command in valid_commands:
-        if valid_command in command:
-            return True
-
 def add_to_history(element):
     to_write = element + "\n"
     target_file = open(HISTORYFILE, 'a')
     target_file.write(to_write)
     target_file.close()
     return
+
+def read_history():
+    command_history = []
+    target_file = open(HISTORYFILE)
+    content = target_file.readlines()
+    for line in content:
+        command_history.append(line[0:len(line)-1])
+    target_file.close()
+    return command_history
+
+def get_recents(lookback):
+    history = read_history()
+    return history[len(history) - lookback:]
+
+def frequency_checker(history):
+    frequency_count = {}
+    for item in history:
+        if item in frequency_count:
+            frequency_count[item] += 1
+        else:
+            frequency_count[item] = 1
+    return frequency_count
+# ####################################################################################################################
+def validity_checker(command):
+    for valid_command in valid_commands:
+        if valid_command in command:
+            return True
 
 def command_handler(): #eventually turn this into a command->fn dict
     command = ""
@@ -226,6 +249,8 @@ def command_handler(): #eventually turn this into a command->fn dict
             print(run_bash(command[command.index("run")+3:]))
         elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:
             break
+        elif "checkhistory" in command:
+            print(frequency_checker((get_recents(3))))
         else:
             print("Invalid command: " + command)
 
