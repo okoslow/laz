@@ -77,8 +77,8 @@ def greet(name):
     if BLOCKED:
         block_message = "\nYou are currently blocked."
     else:
-        block_message = ""
-    return "Welcome, " + name + " " + unicode_emote[random.randrange(0, len(unicode_emote)-1)] + block_message
+        block_message = "\n"
+    return "\nWelcome, " + name + " " + unicode_emote[random.randrange(0, len(unicode_emote)-1)] + block_message
 # ####################################################################################################################
 common_sites = {
 
@@ -126,8 +126,7 @@ valid_commands = [
     "quit",
     "exit",
     "nothing",
-    "go",
-    "checkhistory"
+    "go"
 ]
 # ####################################################################################################################
 def navigate_web(command):
@@ -209,11 +208,11 @@ def read_history():
     target_file.close()
     return command_history
 
-def get_recents(lookback):
+def get_recents(lookback): #looks through [lookback] past commands
     history = read_history()
     return history[len(history) - lookback:]
 
-def frequency_checker(history): #counting sort esque
+def get_freqs(history):
     frequency_count = {}
     for item in history:
         if item in frequency_count:
@@ -224,10 +223,33 @@ def frequency_checker(history): #counting sort esque
     frequencies = []
     for unique_command in frequency_count:
         frequencies.append(frequency_count[unique_command])
+    frequencies.sort()
+    return frequency_count, frequencies
 
+def get_used_task(frequency_count, frq_val):
+    most_used = ""
     for unique_command in frequency_count:
-        if frequency_count[unique_command] == max(frequencies):
-            return unique_command
+        if frequency_count[unique_command] == frq_val:
+             most_used = unique_command
+    return most_used
+
+def x_in_y_most_recents(x, y):
+    history = get_recents(y)
+    frequency_count, frequencies = get_freqs(history)
+    most_recently_used = []
+    for i in range(x):
+        if len(frequencies) - i > 0:
+            most_recently_used.append(get_used_task(frequency_count, frequencies[i]))
+    return list(reversed(most_recently_used))
+
+def output_recents(history_array):
+    print("Would you like to: ")
+    for i in range(len(history_array)):
+        if i == len(history_array)-1:
+            print(" - " + history_array[i] + " ?")
+        else:
+            print(" - " + history_array[i])
+    return ""
 
 # ####################################################################################################################
 def validity_checker(command):
@@ -257,8 +279,6 @@ def command_handler(): #eventually turn this into a command->fn dict
             print(run_bash(command[command.index("run")+3:]))
         elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:
             break
-        elif "checkhistory" in command:
-            print(frequency_checker((get_recents(3))))
         else:
             print("Invalid command: " + command)
 
@@ -272,6 +292,7 @@ BLOCKED = get_block_status()
 WEB_ACCESS = web_access_handler(BLOCKED)
 
 print(greet(getname()))
+print(output_recents(x_in_y_most_recents(3, 10)))
 results = command_handler()
 print(results)
 
