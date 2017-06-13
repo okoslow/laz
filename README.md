@@ -3,7 +3,7 @@
 SETUP:
 find CORRECT .bash_profile
 
-add alias go="python3 ~/laz/yo.py" or relevant path
+add alias go="python3 ~/commandhandler/yo.py" or relevant path
 
 WISHLIST:
 find correct extensions for non fav sites (worst case)
@@ -12,9 +12,9 @@ better case: trawl bookmarks, history
 
 separate everything into separate files (this will esp help with adding commands via cli)
 
-learn from own behavior and suggest updates on launch [under progress]
-
 add help option
+
+separate imports into packages (import laz_packages)
 
 twilio? text support for scheduled tasks
 
@@ -26,4 +26,6 @@ add specific tasklist management
 
 get lyrics to song
 
-add password protection / admin access for history + write commands
+add aliasto for existing commands (ie "show me" = "showme")
+
+add password protection / admin access for history + write commands [requires db]
