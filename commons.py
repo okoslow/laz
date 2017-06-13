@@ -27,3 +27,23 @@ common_sites = {
     "jira": "brigade.atlassian.net/secure/Dashboard.jspa",
     "latex": "sharelatex.com"
 }
+
+valid_commands = [
+    "go to",
+    "goto",
+    "show me",
+    "showme",
+    "headsdownfor",
+    "hdfor",
+    "blocktime",
+    "time",
+    "unblock",
+    "callme",
+    "call me",
+    "run",
+    "quit",
+    "exit",
+    "nothing",
+    "go",
+    "addtask"
+]

@@ -1,5 +1,5 @@
-import commons
-import webbrowser
+from packages import *
+
 
 def navigate_web(command):
      if "go" in command and "to" in command:

@@ -1,14 +1,7 @@
  #LOOK MA NO MOUSE
 ####################################################################################################################
-import webbrowser
-import subprocess
-import random
-import datetime
+from packages import *
 import os
-import scheduler
-import greeting
-import webnav
-import history
 # ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
 SLEEPFILE = ""
@@ -21,28 +14,8 @@ SLEEPFILE = os.path.abspath('.timewrites')
 BLOCKFILE = os.path.abspath('.currentlyblocked')
 NAMEFILE = os.path.abspath('.customname')
 # ####################################################################################################################
-valid_commands = [
-    "go to",
-    "goto",
-    "show me",
-    "showme",
-    "headsdownfor",
-    "hdfor",
-    "blocktime",
-    "time",
-    "unblock",
-    "callme",
-    "call me",
-    "run",
-    "quit",
-    "exit",
-    "nothing",
-    "go",
-    "addtask"
-]
-# ####################################################################################################################
 def validity_checker(command):
-    for valid_command in valid_commands:
+    for valid_command in commons.valid_commands:
         if valid_command in command:
             return True
 

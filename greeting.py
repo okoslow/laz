@@ -1,7 +1,5 @@
-import subprocess
-import scheduler
+from packages import *
 import os
-import random
 NAMEFILE = os.path.abspath('.customname')
 
 def run_bash(bash_command, silent):

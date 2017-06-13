@@ -1,3 +1,4 @@
+import packages
 import os
 HISTORYFILE = os.path.abspath('.commandhistory')
 
