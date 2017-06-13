@@ -1,5 +1,14 @@
-from packages import *
+import webbrowser
+import subprocess
+import random
+import datetime
+import scheduler
+import greeting
+import webnav
+import history
+import commons
 import os
+
 SLEEPFILE = os.path.abspath('.timewrites')
 BLOCKFILE = os.path.abspath('.currentlyblocked')
 UNICODEEMOTE = ["☺☻♡♥❤⚘❀❃❁✼☀✌♫♪☃❄❅❆☕☂★","｡◕‿‿◕｡","(｡◕‿‿◕｡)","(ಠ‿ಠ)","♥‿♥","(¬‿¬)","ʕ•ᴥ•ʔ","(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧","(ᵔᴥᵔ)","(•ω•)","☜(⌒▽⌒)☞","(づ｡◕‿‿◕｡)づ","(╯°□°）╯︵ ┻━┻","٩(⁎❛ᴗ❛⁎)۶","¯\_(ツ)_/¯"]

@@ -1,5 +1,14 @@
-import packages
+import webbrowser
+import subprocess
+import random
+import datetime
+import scheduler
+import greeting
+import webnav
+import history
+import commons
 import os
+
 HISTORYFILE = os.path.abspath('.commandhistory')
 
 def add_to_history(element):

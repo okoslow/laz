@@ -1,4 +1,13 @@
-from packages import *
+import webbrowser
+import subprocess
+import random
+import datetime
+import scheduler
+import greeting
+import webnav
+import history
+import commons
+import os
 
 
 def navigate_web(command):

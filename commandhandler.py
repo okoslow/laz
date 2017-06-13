@@ -1,6 +1,14 @@
  #LOOK MA NO MOUSE
 ####################################################################################################################
-from packages import *
+import webbrowser
+import subprocess
+import random
+import datetime
+import scheduler
+import greeting
+import webnav
+import history
+import commons
 import os
 # ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
