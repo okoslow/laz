@@ -45,10 +45,10 @@ def get_freqs(history):
     frequencies.sort()
     return frequency_count, frequencies
 
-def get_used_task(frequency_count, frq_val):
+def get_used_task(frequency_count, frq_val, mru):
     most_used = ""
     for unique_command in frequency_count:
-        if frequency_count[unique_command] == frq_val:
+        if frequency_count[unique_command] == frq_val and unique_command not in mru:
              most_used = unique_command
     return most_used
 
@@ -58,7 +58,7 @@ def x_in_y_most_recents(x, y):
     most_recently_used = []
     for i in range(x):
         if len(frequencies) - i > 0:
-            most_recently_used.append(get_used_task(frequency_count, frequencies[i]))
+            most_recently_used.append(get_used_task(frequency_count, frequencies[i], most_recently_used))
     return list(reversed(most_recently_used))
 
 def output_recents(history_array):

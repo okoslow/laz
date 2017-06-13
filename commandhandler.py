@@ -62,7 +62,7 @@ BLOCKED = scheduler.get_block_status()
 WEB_ACCESS = scheduler.web_access_handler(BLOCKED)
 
 print(greeting.greet(greeting.getname()))
-print(history.output_recents(history.x_in_y_most_recents(3, 10)))
+print(history.output_recents(history.x_in_y_most_recents(10, 20)))
 results = command_handler()
 print(results)
 
