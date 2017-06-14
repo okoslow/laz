@@ -1,14 +1,12 @@
  #LOOK MA NO MOUSE
 ####################################################################################################################
-import webbrowser
-import subprocess
-import random
 import datetime
 import scheduler
 import greeting
 import webnav
 import history
 import commons
+import terminal
 import os
 # ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
@@ -16,8 +14,8 @@ SLEEPFILE = ""
 BLOCKFILE = ""
 NAMEFILE = ""
 # ####################################################################################################################
-CURRENTDIR = greeting.run_bash('pwd', True)
-LOCALDIR = greeting.run_bash('cd ~/', True)
+CURRENTDIR = terminal.run_bash('pwd', True)
+LOCALDIR = terminal.run_bash('cd ~/', True)
 SLEEPFILE = os.path.abspath('.timewrites')
 BLOCKFILE = os.path.abspath('.currentlyblocked')
 NAMEFILE = os.path.abspath('.customname')
@@ -46,7 +44,7 @@ def command_handler(): #eventually turn this into a command->fn dict
         elif "callme" in command or "call me" in command:
             print(greeting.nickname(command))
         elif "run" in command:
-            print(greeting.run_bash(command[command.index("run")+3:]))
+            print(terminal.run_bash(command[command.index("run")+3:]))
         elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:
             break
         else:
@@ -66,4 +64,4 @@ print(history.output_recents(history.x_in_y_most_recents(10, 20)))
 results = command_handler()
 print(results)
 
-RETURNDIR = greeting.run_bash('cd ' + LOCALDIR, True)
+RETURNDIR = terminal.run_bash('cd ' + LOCALDIR, True)
