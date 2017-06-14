@@ -8,6 +8,7 @@ import history
 import commons
 import terminal
 import music
+import motiv
 import os
 # ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
@@ -42,6 +43,10 @@ def command_handler(): #eventually turn this into a command->fn dict
             print(music.query_handler(command))
         elif "run" in command:
             print(terminal.run_bash(command[command.index("run")+3:]))
+        elif "plus one" in command or "+1" in command or "+ 1" in command or "plus 1" in command:
+            print(motiv.plus_one())
+        elif "score" in command:
+            print(motiv.get_score(False))
         elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:
             break
         else:

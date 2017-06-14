@@ -46,5 +46,8 @@ valid_commands = [
     "nothing",
     "go",
     "addtask",
-    "lyrics"
+    "lyrics",
+    "score",
+    "plus",
+    "+"
 ]
