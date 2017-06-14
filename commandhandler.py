@@ -10,15 +10,9 @@ import terminal
 import os
 # ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
-SLEEPFILE = ""
-BLOCKFILE = ""
-NAMEFILE = ""
 # ####################################################################################################################
 CURRENTDIR = terminal.run_bash('pwd', True)
 LOCALDIR = terminal.run_bash('cd ~/', True)
-SLEEPFILE = os.path.abspath('.timewrites')
-BLOCKFILE = os.path.abspath('.currentlyblocked')
-NAMEFILE = os.path.abspath('.customname')
 # ####################################################################################################################
 def validity_checker(command):
     for valid_command in commons.valid_commands:
@@ -60,7 +54,7 @@ BLOCKED = scheduler.get_block_status()
 WEB_ACCESS = scheduler.web_access_handler(BLOCKED)
 
 print(greeting.greet(greeting.getname()))
-print(history.output_recents(history.x_in_y_most_recents(10, 20)))
+print(history.output_recents(history.x_in_y_most_recents(4, 20)))
 results = command_handler()
 print(results)
 
