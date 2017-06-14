@@ -1,12 +1,13 @@
 import random
 import os
 import scheduler
+import terminal
 
 NAMEFILE = os.path.abspath('.customname')
 
 def whoami():
     bash_command = "id -F"
-    whoami = run_bash(bash_command, False)
+    whoami = terminal.run_bash(bash_command, False)
     return whoami
 
 def nickname(command):
