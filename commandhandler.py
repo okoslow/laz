@@ -45,8 +45,10 @@ def command_handler(): #eventually turn this into a command->fn dict
             print(terminal.run_bash(command[command.index("run")+3:]))
         elif "plus one" in command or "+1" in command or "+ 1" in command or "plus 1" in command:
             print(motiv.plus_one())
-        elif "score" in command:
+        elif "get score" in command or "getscore" in command:
             print(motiv.get_score(False))
+        elif "reset" in command:
+            print(motiv.reset())
         elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:
             break
         else:

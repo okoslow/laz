@@ -16,3 +16,9 @@ def get_score(silent):
         return int(content)
     else:
         return "Your score is now: " + str(content)
+
+def reset():
+    target_file = open(MOTIVFILE, 'w')
+    target_file.write("0")
+    target_file.close()
+    return "Your score was reset.  Good luck!"

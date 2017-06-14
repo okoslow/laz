@@ -49,5 +49,6 @@ valid_commands = [
     "lyrics",
     "score",
     "plus",
-    "+"
+    "+",
+    "reset"
 ]
