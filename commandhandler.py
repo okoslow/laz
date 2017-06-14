@@ -7,6 +7,7 @@ import webnav
 import history
 import commons
 import terminal
+import music
 import os
 # ####################################################################################################################
 GOOGLE_API_KEY = 'AIzaSyAO6Hgd8SRecYqkEicR4NkW0Q80PHG0jHM'
@@ -37,6 +38,8 @@ def command_handler(): #eventually turn this into a command->fn dict
             print(scheduler.unblock())
         elif "callme" in command or "call me" in command:
             print(greeting.nickname(command))
+        elif "lyrics" in command and "by" in command:
+            print(music.query_handler(command))
         elif "run" in command:
             print(terminal.run_bash(command[command.index("run")+3:]))
         elif "quit" in command  or "exit" in command or "nothing" in command or "go" in command:

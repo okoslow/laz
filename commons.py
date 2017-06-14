@@ -45,5 +45,6 @@ valid_commands = [
     "exit",
     "nothing",
     "go",
-    "addtask"
+    "addtask",
+    "lyrics"
 ]
